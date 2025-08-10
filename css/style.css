@@ -5,6 +5,12 @@
   font-weight: 900;
   font-style: normal;
 }
+@font-face {
+  font-family: 'Aspekta';
+  src: url('../fonts/Aspekta-500.otf') format('opentype');
+  font-weight: 500;
+  font-style: light;
+}
 
 /* Reset et base */
 body {
