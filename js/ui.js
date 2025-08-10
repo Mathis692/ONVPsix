@@ -196,9 +196,25 @@ function enableDragScroll(container) {
 }
 
 // Initialisation à l’exécution du script
-generateLayoutThumbnails();
-enableDragScroll(layoutThumbnails);
-updateInputs();
+// Attendre que le DOM soit prêt ET que la police soit chargée
+window.addEventListener('DOMContentLoaded', () => {
+  // charge les variantes utilisées par ton dessin canvas
+  Promise.all([
+    document.fonts.load("900 100px 'Aspekta'"),
+    document.fonts.load("900 36px 'Aspekta'")
+  ]).then(() => {
+    // Init seulement quand la police est dispo
+    generateLayoutThumbnails();
+    enableDragScroll(layoutThumbnails);
+    updateInputs();
+  }).catch(() => {
+    // En cas d’échec de chargement de police, on initialise quand même
+    generateLayoutThumbnails();
+    enableDragScroll(layoutThumbnails);
+    updateInputs();
+  });
+});
+
 
 /* ---------- Mobile: réduction/extension des paramètres ---------- */
 // ATTENTION: nécessite dans index.html un bouton:
