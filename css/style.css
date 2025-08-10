@@ -916,3 +916,72 @@ body.home .home-spacer {
 #formatSelect {
   -webkit-appearance: none; /* Safari / iOS */
 }
+
+/* Dock réseaux (positionné en bas à droite) */
+.fixed-socials{
+  position: fixed;
+  right: 16px;
+  bottom: max(16px, env(safe-area-inset-bottom)); /* safe area iOS */
+  display: flex;
+  flex-direction: column;  /* pile verticale */
+  gap: 10px;
+  z-index: 1000;           /* au-dessus du contenu */
+}
+
+/* Boutons (gère .social-btn ET ton .fixed-instagram-link) */
+.fixed-socials .social-btn,
+.fixed-socials .fixed-instagram-link{
+  width: 48px;
+  height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #ff5f00;     /* orange charte */
+  border-radius: 9999px;
+  box-shadow: 0 4px 12px rgba(0,0,0,.2);
+  text-decoration: none;
+  color: #1d1d1b;          /* currentColor pour les strokes */
+  transition: transform .15s ease, box-shadow .15s ease, opacity .15s ease;
+}
+
+/* Icônes */
+.fixed-socials svg{
+  width: 24px;
+  height: 24px;
+  fill: #1d1d1b;           /* pour les icônes en fill */
+}
+
+/* Icône X en stroke */
+.fixed-socials .icon-x path{
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+/* Hover */
+.fixed-socials .social-btn:hover,
+.fixed-socials .fixed-instagram-link:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(0,0,0,.25);
+  opacity: .96;
+}
+
+/* Taille un peu plus petite sur mobile */
+@media (max-width: 768px){
+  .fixed-socials .social-btn,
+  .fixed-socials .fixed-instagram-link{
+    width: 44px;
+    height: 44px;
+  }
+  .fixed-socials svg{
+    width: 22px;
+    height: 22px;
+  }
+}
+
+/* (Optionnel) disposition horizontale sur desktop
+@media (min-width: 1024px){
+  .fixed-socials{ flex-direction: row; }
+}
+*/
