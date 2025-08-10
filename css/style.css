@@ -49,7 +49,6 @@ body {
   background: rgba(50,50,50,0);
   font-weight: bold;
   cursor: grab;
-  border-bottom: 2px solid #ffffff;
   border-radius: 0;
   user-select: none;
   text-align: center;
