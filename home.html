@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ON NE VEUT PLUS</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" type="image/png" href="/img/favicon.jpeg">
+
+  <style>
+    
+    /* Style pour la zone texte */
+    #texte {
+      max-width: 65vw;
+      margin: 3rem auto;
+      font-family: Aspekta, sans-serif;
+      font-size: 3rem;
+      line-height: 1.6;
+      perspective: 800px;
+      transform-style: preserve-3d;
+      /* Centrer l'origine de transformation au centre */
+      transform-origin: center center;
+      transition: transform 0.1s ease-out;
+      will-change: transform;
+    }
+  
+    /* Canvas de fond plein écran */
+    #bgCanvas {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      width: 100vw;
+      height: 100vh;
+      display: block;
+    }
+
+    /* Zone texte au-dessus, avec un léger fond pour la lecture si besoin */
+
+    #entree {
+      position: relative;
+      z-index: 1;
+      max-width: 65ch;
+      margin: 3rem auto;
+      font-family: Aspekta, sans-serif;
+      font-size: 2rem;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 768px) {
+      #texte { font-size: 1.1rem; margin: 1.5rem auto; }
+    }
+
+  </style>
+</head>
+<body class="home">
+  <div class="header">
+    <h1><a href="/index.html">PRODUIRE ⭢</a></h1>
+  </div>
+  <canvas id="bgCanvas" aria-hidden="true"></canvas>
+<div class="home-spacer" aria-hidden="true"></div>
+  <div id="entree" class="home-blur">
+   Nous ne voulons plus.<br>
+  Et ils ne peuvent plus.<br>
+<br>
+
+  Ils ne peuvent plus trouver de solution à la crise économique, sociale, démocratique et écologique qu'ils ont provoqué.
+<br>
+  Tout ce qu'ils peuvent encore c'est nous imposer par la force de leur police et de leurs matraques : l'allongement de l'âge de départ à la retraite, le déremboursement des soins, la destruction des services publics, l'inflation, la captation des richesses par une minorité, la destruction et l'empoisonnement de notre environnement.
+<br>
+<br>
+  Mais nous ne voulons plus.<br> 
+  Nous voulons : partir à la retraite à 60 ans quand nous avons encore la santé pour vivre ; le 100% sécurité sociale ; une hausse massive des salaires ; le respect des décisions démocratiques ; un environnement sain et protecteur pour tous ; des services publics étendus à tous, à tout, et partout.
+<br><br>
+  Macron est le symbole de leur impuissance et de leur violence. Il doit partir.
+<br><br>
+  Ils ne peuvent plus. Nous ne voulons plus. L'heure de la crise a sonné : celle de la récupération de tout ce qu'ils nous ont pris. Contre leurs mesures austéritaires qui ne profitent qu’à quelques-uns, opposons le réalisme de nos besoins qui profite à tous. 
+  <br>
+  <br>
+  Le 10 septembre, démontrons notre détermination et imposons notre volonté à ceux qui la piétinent.
+  </div>
+    <div id="entree" class="home-blur">
+  <h3 class="form-title">Formulaire, pour nous rejoindre.</h3>
+  <hr>
+
+  <form action="/ma-page-de-traitement" method="post" class="join-form">
+    <!-- Nom -->
+    <div class="form-row">
+      <label for="name" class="label-col">Nom</label>
+      <div class="input-col">
+        <div class="text-wrapper">
+          <input type="text" id="name" name="user_name" placeholder="Votre nom">
+        </div>
+      </div>
+    </div>
+
+    <!-- Email -->
+    <div class="form-row">
+      <label for="mail" class="label-col">E-mail</label>
+      <div class="input-col">
+        <div class="text-wrapper">
+          <input type="email" id="mail" name="user_mail" placeholder="nom@exemple.com">
+        </div>
+      </div>
+    </div>
+
+    <!-- Message -->
+    <div class="form-row">
+      <label for="msg" class="label-col">Message</label>
+      <div class="input-col">
+        <div class="text-wrapper">
+          <textarea id="msg" name="user_message" rows="5" placeholder="Dites-nous en plus…"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <button type="submit"><H3>ENVOYER</H3></button>
+  </form>
+</div>
+<div class="home-spacer" aria-hidden="true"></div>
+
+
+  <script src="js/home-bg.js"></script>
+</body>
+</html>

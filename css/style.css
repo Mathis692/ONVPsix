@@ -1,0 +1,910 @@
+/* Police Aspekta */
+@font-face {
+  font-family: 'Aspekta';
+  src: url('../fonts/Aspekta-900.otf') format('opentype');
+  font-weight: 900;
+  font-style: normal;
+}
+
+/* Reset et base */
+body {
+  font-family: Aspekta, sans-serif;
+  margin: 0; padding: 0;
+  color: white;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Container global */
+#app {
+  display: flex;
+  height: 100vh;
+}
+
+/* Fenêtre flottante paramètres */
+.floating-window {
+  position: fixed;
+  top: 50px; left: 50px;
+  width: 320px;
+  max-height: 90vh;
+  background: rgba(30,30,30,0.85);
+   backdrop-filter: blur(10px);
+  border-radius: 0;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.7);
+ 
+  -webkit-backdrop-filter: blur(10px);
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  z-index: 1000;
+  user-select: none;
+  overflow: hidden;
+  padding: 5px;
+}
+
+/* En-tête déplaçable */
+.floating-header {
+  font-size: 30px;
+  padding: 20px 0;
+  background: rgba(50,50,50,0);
+  font-weight: bold;
+  cursor: grab;
+  border-bottom: 2px solid #ffffff;
+  border-radius: 0;
+  user-select: none;
+  text-align: center;
+}
+
+/* Sidebar contenu */
+#sidebar {
+  padding: 0px;
+  overflow-y: auto;
+  flex-grow: 1;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Form row: label + input side by side */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Label col style */
+.label-col {
+  font-weight: bold;
+  color: #ffffff;
+  font-size: 14px;
+  user-select: none;
+}
+
+/* Input col style */
+.input-col {
+  width: 100%;
+}
+
+/* Compositions title */
+.compositions-title {
+  font-weight: bold;
+  font-size: 14px;
+  color: #ffffff;
+  margin-top: 12px;
+  margin-bottom: 6px;
+  user-select: none;
+}
+
+/* Thumbnails container */
+.layout-thumbnails {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding-bottom: 10px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.layout-thumbnails::-webkit-scrollbar {
+  display: none;
+}
+
+/* Vignette layout */
+.layout-thumb {
+  flex: 0 0 auto;
+  width: 110px;
+  padding: 10px;
+  cursor: pointer;
+  user-select: none;
+  border: 2px solid transparent;
+  box-sizing: border-box;
+  transition: border-color 0.3s;
+  border-radius: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.layout-thumb.selected,
+.layout-thumb:hover {
+  background: #1e1d1b;
+}
+
+/* Aperçu layout */
+.layout-preview {
+  background: transparent;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  border: none;
+  padding: 0;
+  margin: 0 auto;
+  box-sizing: content-box;
+  width: 180px;
+  height: 180px;
+}
+
+/* Bloc dans l’aperçu */
+.layout-preview .block {
+  flex-grow: 0;
+  position: relative;
+  background: transparent; /* plus de background */
+  cursor: default;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: #ddd;
+  user-select: none;
+  padding: 0 10px;
+  margin: 0;
+  /* hauteur fixée en JS */
+}
+
+/* Couleur spécifique au 2e bloc */
+.layout-preview .block:nth-child(2) {
+  background-color: transparent; /* bien transparent */
+  opacity: 1;
+}
+
+/* Filet orange entre les blocs, limité au contenu */
+.layout-preview .block:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 10px;
+  right: 10px;
+  height: 2px;
+  background: #ffffff;
+  pointer-events: none;
+}
+
+/* Input + select group style for text blocks */
+.input-group {
+  margin-bottom: 12px;
+  box-sizing: border-box;
+  border-radius: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: black;
+}
+
+/* Wrapper fond orange pour input texte */
+.text-wrapper {
+  background: #ffffff;
+  padding: 6px 8px;
+  border-radius: 0;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+}
+
+/* Champ texte blanc sur fond orange */
+.text-wrapper input[type="text"] {
+  background: transparent;
+  border: none;
+  color: black;
+  font-size: 14px;
+  width: 100%;
+  box-sizing: border-box;
+  outline: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Sélecteur sous champ texte, transparent */
+.input-group select {
+  background: transparent;
+  border: none;
+  color: #fcfcfc;
+  font-size: 14px;
+  cursor: pointer;
+  width: 100%;
+  box-sizing: border-box;
+  outline: none;
+  padding: 4px 0;
+  border-bottom: 1px solid #ffffff;
+  transition: border-color 0.3s;
+}
+
+.input-group select:hover,
+.input-group select:focus {
+  background-color: #000000cc; /* fond noir semi-transparent */
+  border-bottom-color: #ffffff;
+}
+
+/* Option dans select en orange foncé */
+.input-group select option {
+  background: #222;
+  color: #ffffff;
+}
+
+/* Boutons stylés */
+button {
+  background: #fff;
+  color: black;
+  font-weight: bold;
+  border: none;
+  padding: 12px;
+  cursor: pointer;
+  border-radius: 0;
+  transition: background-color 0.3s;
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: auto;
+}
+
+button:hover {
+  background: #ff5f00;
+}
+
+/* Canvas container */
+#canvasContainer {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #555;
+}
+
+/* Canvas style : sans bordure noire */
+canvas {
+  border: none !important;
+  background: white;
+  max-height: 80%;
+  max-width: 80%;
+  display: block;
+  margin: auto;
+}
+
+/* Input range style */
+.input-col input[type="range"] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 1px;
+  background: #ffffff;
+  border-radius: 4px;
+  outline: none;
+  cursor: pointer;
+  margin: 0;
+  padding: 0;
+}
+
+.input-col input[type="range"]::-webkit-slider-runnable-track {
+  height: 1px;
+  background: #ffffff;
+  border-radius: 4px;
+}
+
+.input-col input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 24px;
+  background: #ffffff;
+  cursor: pointer;
+  border-radius: 0;
+  margin-top: -12px;
+  border: none;
+  transition: background-color 0.3s;
+}
+
+.input-col input[type="range"]::-webkit-slider-thumb:hover {
+  background: #ffffff;
+}
+
+.input-col input[type="range"]::-moz-range-track {
+  height: 1px;
+  background: #ffffff;
+  border-radius: 4px;
+}
+
+.input-col input[type="range"]::-moz-range-thumb {
+  width: 16px;
+  height: 24px;
+  background: #ffffff;
+  cursor: pointer;
+  border-radius: 0;
+  border: none;
+  transition: background-color 0.3s;
+}
+
+.input-col input[type="range"]::-moz-range-thumb:hover {
+  background: #ffffff;
+}
+
+#exportBtn {
+  font-family: Aspekta;
+  font-size: 30px;
+}
+
+/* Placeholder couleur */
+input::placeholder {
+  color: #ffffff;
+  opacity: 1;
+}
+
+input::-moz-placeholder {
+  color: #ffffff;
+  opacity: 1;
+}
+
+input:-ms-input-placeholder {
+  color: #ffffff;
+}
+
+input::-ms-input-placeholder {
+  color: #fff;
+}
+
+input::-webkit-input-placeholder {
+  color: #fff;
+}
+
+select#formatSelect {
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid #ffffff;
+  color: #ffffff;
+  font-size: 14px;
+  padding: 6px 4px;
+  width: 100%;
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: border-color 0.3s;
+}
+
+select#formatSelect:hover,
+select#formatSelect:focus {
+  background-color: #000000cc;
+  border-bottom-color: #ffffff;
+}
+
+select#formatSelect option {
+  background: #222;
+  color: #ffffff;
+}
+
+/* Assure que les vignettes thumbnails ne grandissent pas en hauteur */
+/* On fixe la hauteur de la zone de vignettes à l'automatique */
+.layout-thumbnails {
+  height: auto !important;  /* Ne force pas une hauteur fixe */
+  max-height: none !important; /* Supprime max-height */
+}
+
+/* Fixe la taille des blocs dans la preview */
+.layout-preview {
+  width: 180px;       /* largeur fixe */
+  height: 180px;      /* hauteur fixe */
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* Chaque bloc a une hauteur fixe basée sur le % donné */
+.layout-preview .block {
+  flex-grow: 0;
+  flex-shrink: 0;
+  height: auto !important;
+  margin: 0;
+  padding: 0 10px;
+  position: relative;
+}
+
+/* Important : hauteur des blocs fixée en JS selon leur pourcentage */
+/* Si tu as un style inline sur chaque bloc, garde-le, sinon tu peux aussi forcer : */
+.layout-preview .block {
+  height: auto; /* la hauteur doit être fixée par le JS, ne pas forcer ici */
+}
+
+/* Supprime tout overflow du floating-window qui pourrait forcer les vignettes à se compresser */
+.floating-window {
+  overflow-y: visible !important;
+}
+
+/* Ne laisse pas le sidebar contraindre la hauteur des vignettes */
+#sidebar {
+  overflow-y: visible !important;
+  height: auto !important;
+}
+
+#canvasContainer {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: url('/img/background.jpeg') no-repeat center center;
+  background-size: cover;
+  position: relative;
+}
+
+@media (max-width: 768px) {
+  #app {
+    flex-direction: column;
+  }
+
+  .floating-window {
+    position: relative;
+    width: 100%;
+    height: 40vh; /* 40% de la hauteur visible */
+    max-height: none;
+    top: 0;
+    left: 0;
+    border-bottom: 2px solid #fff;
+  }
+
+  #canvasContainer {
+    height: 60vh; /* 60% de la hauteur visible */
+    flex: none;
+  }
+}
+
+@media (max-width: 768px) {
+  #app {
+    flex-direction: column-reverse; /* interface en bas */
+    height: 100vh;
+  }
+
+  .floating-window {
+    position: relative;
+    width: 100%;
+    height: 40vh; /* 40% hauteur par défaut */
+    max-height: none;
+    top: auto;
+    left: auto;
+    border-top: 2px solid #fff;
+    border-bottom: none;
+    transition: height 0.3s ease;
+  }
+
+  #canvasContainer {
+    height: 60vh; /* 60% hauteur par défaut */
+    flex: none;
+    transition: height 0.3s ease;
+  }
+
+  /* Bouton affiché seulement sur mobile */
+  #toggleSettings {
+    display: inline-block;
+    margin-left: 10px;
+    background: #444;
+    color: #fff;
+    border: none;
+    padding: 4px 8px;
+    cursor: pointer;
+  }
+}
+
+/* --- FOND PLEIN ÉCRAN FIXE --- */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: url('/img/background.jpeg') center/cover no-repeat;
+  /* pas de parallaxe -> ne bouge jamais */
+  will-change: transform;
+}
+
+/* le container du canvas n'a plus de fond propre */
+#canvasContainer {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: transparent; /* remplace l'ancienne image */
+  position: relative;
+}
+
+/* --- BOUTON DISCRET (MOBILE SEULEMENT) --- */
+#toggleSettings {
+  display: none;           /* desktop: caché */
+  position: fixed;
+  top: 8px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+  font-size: 16px;
+  color: #fff;
+  border-radius: 6px;
+  text-align: center;
+  padding: 0;
+  cursor: pointer;
+  z-index: 1100;
+}
+
+/* --- RESPONSIVE MOBILE --- */
+@media (max-width: 768px) {
+  #app { 
+    flex-direction: column-reverse; /* interface en bas */
+    height: 100vh;
+  }
+
+  /* typos plus petites */
+  .floating-header { font-size: 18px; padding: 10px 0; }
+  .label-col { font-size: 12px; }
+  .text-wrapper input[type="text"] { font-size: 13px; }
+  .input-group select { font-size: 13px; }
+  button { padding: 10px; font-size: 14px; }
+  #exportBtn { font-size: 18px; }
+
+  /* tailles par défaut interface/canvas */
+  .floating-window {
+    position: relative;
+    width: 100%;
+    height: 40vh;
+    max-height: none;
+    top: auto; left: auto;
+    border-top: 2spx solid #ffffff;
+    border-bottom: none;
+    transition: height .25s ease;
+  }
+  #canvasContainer {
+    height: 60vh;
+    flex: none;
+    transition: height .25s ease;
+  }
+
+  /* bouton visible seulement en mobile */
+  #toggleSettings { display: inline-block; }
+}
+
+/* ====== HOME ONLY (plein écran, fond transparent, pas de marges) ====== */
+
+
+/* Le canvas de HOME doit ignorer la règle globale "canvas { ... }" */
+body.home #canvas {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  width: 100vw;
+  height: 100vh;
+  display: block;
+  background: transparent !important;
+  margin: 0 !important;
+  max-width: none !important;
+  max-height: none !important;
+  border: none !important;
+  pointer-events: none;
+}
+
+/* Le conteneur ne doit pas imposer de fond */
+body.home #canvasContainer {
+  background: transparent !important;
+}
+
+/* (Optionnel) Si tu as d'autres canvas sur d'autres pages,
+   on neutralise la règle globale uniquement pour HOME */
+body.home canvas {
+  background: transparent !important;
+  margin: 0 !important;
+  max-width: none !important;
+  max-height: none !important;
+}
+
+#canvas { background: transparent !important; }
+
+/* ne s'applique PAS à HOME */
+body:not(.home) canvas {
+  border: none;
+  background: white;
+  max-height: 80%;
+  max-width: 80%;
+  display: block;
+  margin: auto;
+}
+
+/* HOME uniquement : canvas plein écran, vraiment transparent */
+body.home #bgCanvas {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: -1 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  display: block !important;
+  background: transparent !important;
+  margin: 0 !important;
+  max-width: none !important;
+  max-height: none !important;
+  border: none !important;
+  pointer-events: none !important;
+}
+
+
+/* HOME : image de fond plein écran */
+html, body { height: 100%; margin: 0; }
+body.home {
+  background: url('/img/background.jpeg') center center no-repeat fixed;
+  background-size: 100% 100%; /* si tu préfères garder le ratio, mets: cover */
+}
+
+/* pour voir l'image à travers le canvas */
+#bgCanvas { background: transparent !important; }
+
+/* 1) NE PAS forcer le blanc sur HOME */
+body:not(.home) canvas {
+  border: none;
+  background: white;
+  max-height: 80%;
+  max-width: 80%;
+  display: block;
+  margin: auto;
+}
+/* (Laisse la règle globale `canvas { ... }` de côté ou supprime-la.) */
+
+/* 2) HOME : même fond fixe que index */
+body.home::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: url('/img/background.jpeg') center/cover no-repeat;
+}
+
+/* 3) HOME : canvas plein écran transparent (utilise bien <canvas id="bgCanvas">) */
+body.home #bgCanvas {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: -1 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  display: block !important;
+  background: transparent !important;
+  margin: 0 !important;
+  max-width: none !important;
+  max-height: none !important;
+  border: none !important;
+  pointer-events: none !important;
+}
+
+/* 4) Sécurité : neutralise tout “canvas { background:white }” restant sur HOME */
+body.home canvas {
+  background: transparent !important;
+  margin: 0 !important;
+  max-width: none !important;
+  max-height: none !important;
+}
+
+/* 5) HOME : container du canvas sans fond */
+body.home #canvasContainer { background: transparent !important; }
+
+/* === HOME : bloc flou derrière le texte, non-fixed, pas de crop === */
+body.home .home-blur {
+  position: relative;                /* dans le flux */
+  margin: 28vh auto 6vh;             /* commence assez bas, centré */
+  padding: 24px 28px;                /* respiration autour du texte */
+  width: min(900px, 92vw);   
+    text-align: center;        /* largeur responsive */
+  
+  /* le blur (nécessite un fond avec alpha > 0) */
+  background: rgba(20,20,20,0.35);
+  backdrop-filter: blur(10px) saturate(115%);
+  -webkit-backdrop-filter: blur(10px) saturate(115%);
+
+  /* look proche de ta floating-window, sans grab */
+
+  box-shadow: 0 8px 24px rgba(0,0,0,0.45);
+  border-radius: 0;
+  color: #fff;
+
+  /* très important: ne PAS enfermer le texte */
+  overflow: visible;                  /* pas de scroll interne */
+  user-select: text;
+  cursor: default;
+  z-index: 1;                         /* au-dessus du canvas (z:-1) */
+}
+
+/* un peu de typo par défaut (optionnel) */
+body.home .home-blur p {
+  margin: 0 0 12px;
+  line-height: 1.6;
+  font-size: clamp(16px, 1.55vw, 20px);
+  text-align: center;
+}
+body.home .home-blur p:last-child { margin-bottom: 0; }
+
+/* mobile: un peu moins bas et plus compact */
+@media (max-width: 768px) {
+  body.home .home-blur {
+    margin: 18vh auto 4vh;
+    padding: 16px;
+    width: 90vw;
+  }
+}
+
+body.home .home-spacer {
+  height: 120vh;   /* ~1,2 écran : il faut scroller pour voir le bloc */
+}
+
+/* Bandeau full-width en haut, centré */
+.fixed-home-link{
+  mix-blend-mode: lighten;
+  position: fixed;
+  top: max(16px, env(safe-area-inset-top));
+  left: 0;
+  right: 0;
+  display: grid;
+  place-items: start center;   /* centre horizontalement le contenu */
+  z-index: 2000;
+}
+
+/* Le lien + blend "éclaircir" */
+.fixed-home-link a{
+  display: inline-block;
+  mix-blend-mode: lighten;
+  pointer-events: auto;
+  /* Correctif d'alignement optique si ton PNG a du vide d'un côté */
+  --optical-shift: 0px;        /* ajuste à, ex: -8px ou 6px */
+  transform: translateX(var(--optical-shift));
+}
+
+/* L'image elle-même */
+.fixed-home-link img{
+  display: block;              /* pas d'espace inline */
+  height: 56px;                /* taille du logo */
+  width: auto;
+}
+
+/* Mobile */
+@media (max-width: 768px){
+  .home-logo-fixed img{ height: 44px; }
+}
+
+/* Panneau formulaire : même look que .floating-window, mais PAS en fixed */
+.form-panel{
+  position: relative;
+  margin: 6vh auto;
+  width: min(720px, 92vw);
+  background: rgba(30,30,30,0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.7);
+  color: #fff;
+  border-radius: 0;
+  border: 1px solid rgba(255,255,255,0.12);
+  padding: 16px 18px;
+}
+
+/* Titre */
+.form-title{
+  margin: 0 0 8px;
+  font-weight: 900;
+  text-align: center;
+}
+
+/* On réutilise ta grille sidebar */
+.join-form .form-row{ margin-bottom: 12px; }
+.join-form .input-col{ width: 100%; }
+
+/* Étend le style des inputs à email + textarea aussi */
+.text-wrapper{
+  background: #ffffff;
+  padding: 6px 8px;
+  border-radius: 0;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+}
+.text-wrapper input[type="text"],
+.text-wrapper input[type="email"],
+.text-wrapper textarea{
+  background: transparent;
+  border: none;
+  color: #000;
+  width: 100%;
+  outline: none;
+  margin: 0;
+  padding: 0;
+  resize: vertical; /* textarea */
+}
+
+/* Placeholder lisible sur fond blanc */
+.text-wrapper input::placeholder,
+.text-wrapper textarea::placeholder{
+  color: #555;
+  opacity: 1;
+}
+
+/* État focus (léger) */
+.text-wrapper:focus-within{
+  background-color: 2px solid #ff5f01;
+  outline-offset: 2px;
+}
+
+/* Bouton déjà stylé globalement; on serre un peu ici */
+.form-panel button{
+  margin-top: 8px;
+}
+
+/* Responsive : label au-dessus en mobile */
+@media (max-width: 768px){
+  .join-form .form-row{
+    grid-template-columns: 1fr !important;
+    gap: 6px;
+  }
+}
+
+/* Bouton du formulaire : même look que les inputs/Sidebar */
+.form-panel button {
+  display: block;
+  width: 100%;
+  background: #ffffff;          /* comme .text-wrapper */
+  color: #000;
+  font-family: Aspekta, sans-serif;
+  font-weight: 900;
+  font-size: 16px;
+  padding: 12px 14px;
+  border: none;
+  border-radius: 0;
+  box-shadow: 0 2px 0 rgba(0,0,0,0.2);
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.form-panel button:hover {
+  background: #ff5f01;          /* hover comme le reste */
+  color: #1d1d1b;
+}
+
+.form-panel button:focus {
+  outline: 2px solid #ff5f01;   /* focus cohérent */
+  outline-offset: 2px;
+}
+.join-form .actions { margin-top: 6px; }
+@media (max-width: 768px){
+  .join-form .actions { grid-template-columns: 1fr !important; }
+}
+
+/* Header centré au milieu du viewport, fixe */
+.header{
+  position: absolute;
+  inset: 0;                 /* occupe tout l’écran */
+  display: grid;
+  place-items: center;      /* centre horizontal + vertical */
+  z-index: 3000;            /* au-dessus du canvas */
+  margin: 0;
+  pointer-events: none;     /* laisse le clic à l’intérieur */
+}
+
+.header h1{
+  margin: 0;
+  line-height: 1;
+  font-weight: 900;
+  font-size: clamp(22px, 3vw, 40px);
+}
+
+.header a{
+  color: #fff;
+  text-decoration: none;
+  pointer-events: auto;     /* clic actif */
+  /* optionnel : effet “éclaircir” sur le fond
+  mix-blend-mode: lighten;
+  */
+}
