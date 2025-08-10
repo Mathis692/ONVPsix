@@ -908,3 +908,6 @@ body.home .home-spacer {
   mix-blend-mode: lighten;
   */
 }
+#formatSelect {
+  -webkit-appearance: none; /* Safari / iOS */
+}
