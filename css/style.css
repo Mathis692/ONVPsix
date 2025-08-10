@@ -917,71 +917,69 @@ body.home .home-spacer {
   -webkit-appearance: none; /* Safari / iOS */
 }
 
-/* Dock réseaux (positionné en bas à droite) */
+/* Dock de réseaux : centré horizontalement, en bas */
 .fixed-socials{
   position: fixed;
-  right: 16px;
-  bottom: max(16px, env(safe-area-inset-bottom)); /* safe area iOS */
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: max(16px, env(safe-area-inset-bottom));
   display: flex;
-  flex-direction: column;  /* pile verticale */
-  gap: 10px;
-  z-index: 1000;           /* au-dessus du contenu */
+  flex-direction: row;     /* gauche → droite */
+  align-items: center;     /* alignement vertical central */
+  justify-content: center; /* centrage horizontal du groupe */
+  gap: 16px;
+  z-index: 1000;
 }
 
-/* Boutons (gère .social-btn ET ton .fixed-instagram-link) */
-.fixed-socials .social-btn,
-.fixed-socials .fixed-instagram-link{
-  width: 48px;
-  height: 48px;
+/* Liens sans fond ni rond */
+.fixed-socials a{
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 0;
+  line-height: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: #ff5f00;     /* orange charte */
-  border-radius: 9999px;
-  box-shadow: 0 4px 12px rgba(0,0,0,.2);
+  color: #fff;             /* icons en blanc */
   text-decoration: none;
-  color: #1d1d1b;          /* currentColor pour les strokes */
-  transition: transform .15s ease, box-shadow .15s ease, opacity .15s ease;
 }
 
-/* Icônes */
+/* Icônes : taille homogène */
 .fixed-socials svg{
-  width: 24px;
-  height: 24px;
-  fill: #1d1d1b;           /* pour les icônes en fill */
+  height: 28px;            /* ajuste si tu veux plus grand/petit */
+  width: auto;
+  display: block;
 }
 
-/* Icône X en stroke */
+/* Forcer les tracés en blanc (écrase fill/stroke des SVG) */
+.fixed-socials svg *{
+  fill: currentColor !important;
+  stroke: currentColor !important;
+}
+
+/* X (si ton SVG est en traits, garde-le en stroke uniquement) */
 .fixed-socials .icon-x path{
-  fill: none;
-  stroke: currentColor;
+  fill: none !important;
+  stroke: currentColor !important;
   stroke-width: 2;
   stroke-linecap: round;
 }
 
-/* Hover */
-.fixed-socials .social-btn:hover,
-.fixed-socials .fixed-instagram-link:hover{
+/* Telegram : enlever uniquement le cercle de fond */
+.fixed-socials .icon-telegram circle{
+  display: none;
+}
+
+/* Optionnel : léger hover */
+.fixed-socials a:hover{
+  opacity: .9;
   transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(0,0,0,.25);
-  opacity: .96;
+  transition: transform .15s ease, opacity .15s ease;
 }
 
-/* Taille un peu plus petite sur mobile */
+/* Mobile : un peu plus petit */
 @media (max-width: 768px){
-  .fixed-socials .social-btn,
-  .fixed-socials .fixed-instagram-link{
-    width: 44px;
-    height: 44px;
-  }
-  .fixed-socials svg{
-    width: 22px;
-    height: 22px;
-  }
+  .fixed-socials svg{ height: 24px; }
+  .fixed-socials{ gap: 12px; }
 }
-
-/* (Optionnel) disposition horizontale sur desktop
-@media (min-width: 1024px){
-  .fixed-socials{ flex-direction: row; }
-}
-*/
