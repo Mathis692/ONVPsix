@@ -644,10 +644,7 @@ body.home #bgCanvas {
 
 /* HOME : image de fond plein écran */
 html, body { height: 100%; margin: 0; }
-body.home {
-  background: url('/img/background.jpeg') center center no-repeat fixed;
-  background-size: 100% 100%; /* si tu préfères garder le ratio, mets: cover */
-}
+
 
 /* pour voir l'image à travers le canvas */
 #bgCanvas { background: transparent !important; }
@@ -982,4 +979,100 @@ body.home .home-spacer {
 @media (max-width: 768px){
   .fixed-socials svg{ height: 24px; }
   .fixed-socials{ gap: 12px; }
+}
+
+/* === Scroll horizontal custom pour #layoutThumbnails — desktop only === */
+@media (min-width: 769px) {
+  /* Le conteneur de vignettes : scroll horizontal natif, barre native cachée */
+  #layoutThumbnails {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    scrollbar-width: none;      /* Firefox : masque la barre native */
+    -ms-overflow-style: none;   /* IE/Edge */
+    padding-bottom: 10px;       /* petit espace au-dessus de la barre custom */
+  }
+  #layoutThumbnails::-webkit-scrollbar { 
+    display: none;              /* Chrome/Safari : masque la barre native */
+  }
+
+  /* Barre custom SŒUR placée juste après #layoutThumbnails (pas d'overlay) */
+  .thumbbar-sibling {
+    position: relative;
+    height: 10px;               /* zone cliquable/drag confortable */
+    width: 100%;
+    pointer-events: auto;       /* interactive pour le drag */
+    user-select: none;
+    -webkit-user-select: none;
+    mix-blend-mode: lighten;    /* optionnel, pour se fondre à la DA */
+  }
+
+  /* Piste grise (fine) */
+  .thumbbar-sibling .track {
+    position: absolute;
+    left: 0; 
+    right: 0; 
+    top: 50%;
+    height: 3px;                /* piste = 3px */
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 999px;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+  }
+
+  /* Curseur orange (plus épais +3px, arrondi) */
+  .thumbbar-sibling .thumb {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    height: 6px;                /* thumb = 6px (3px de plus que la piste) */
+    transform: translateY(-50%);/* translateX est géré en JS */
+    width: 15%;                 /* sera ajusté en JS selon le contenu */
+    background: #ff5f01;        /* orange DA */
+    border-radius: 999px;       /* pilule bien arrondie */
+    box-shadow: 0 0 10px rgba(255, 95, 1, 0.45);
+    transition: transform .12s linear, width .12s ease;
+    cursor: grab;               /* feedback drag */
+    will-change: transform;
+  }
+
+  /* État pendant le drag (pas d'animation, curseur) */
+  .thumbbar-sibling.dragging .thumb {
+    cursor: grabbing;
+    transition: none;
+  }
+
+  /* Accessibilité : réduire les animations si demandé par l'utilisateur */
+  @media (prefers-reduced-motion: reduce) {
+    .thumbbar-sibling .thumb { 
+      transition: none; 
+      box-shadow: none; 
+    }
+  }
+}
+
+/* Mobile : on ne rend pas la barre custom, la native tactile suffit */
+@media (max-width: 768px) {
+  .thumbbar-sibling { 
+    display: none !important; 
+  }
+}
+
+
+/* --- FIX MOBILE : fond net, sans "fixed", et pas d'étirement --- */
+@media (max-width: 768px) {
+  /* 1) Désactive le fond direct sur <body.home> (qui étirait à 100% 100%) */
+  body.home { 
+    background: none !important;
+  }
+
+  /* 2) Le vrai fond passe par ::before, sans attachment fixed */
+  body.home::before,
+  body:not(.home)::before {
+    background-image: url('/img/background.jpeg') !important;
+    background-repeat: no-repeat !important;
+    background-position: center center !important;
+    background-size: cover !important;          /* garde le ratio */
+    background-attachment: scroll !important;   /* pas de "fixed" sur mobile */
+  }
 }
